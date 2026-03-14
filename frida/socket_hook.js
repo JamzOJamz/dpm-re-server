@@ -13,16 +13,19 @@ Java.perform(function () {
         bufferSize,
         extra,
     ) {
-        var finalHost = SPOOFED_HOST !== null ? SPOOFED_HOST : host;
-        var finalPort = SPOOFED_PORT !== null ? SPOOFED_PORT : port;
+        const isMaestro = extra == "Size32";
+        const shouldSpoof = isMaestro && SPOOFED_HOST !== null;
+
+        var finalHost = shouldSpoof ? SPOOFED_HOST : host;
+        var finalPort = shouldSpoof ? SPOOFED_PORT : port;
 
         console.log("\n[JavaSocket.$init] New connection");
         console.log("  socketType:   " + socketType);
         console.log("  nativeObject: " + nativeObj);
         console.log("  bufferSize:   " + bufferSize);
         console.log("  extra:        " + extra);
-        console.log("  host:         " + host + (SPOOFED_HOST !== null ? " => " + finalHost + " (spoofed)" : ""));
-        console.log("  port:         " + port + (SPOOFED_PORT !== null ? " => " + finalPort + " (spoofed)" : ""));
+        console.log("  host:         " + host + (shouldSpoof ? " => " + finalHost + " (spoofed)" : ""));
+        console.log("  port:         " + port + (shouldSpoof ? " => " + finalPort + " (spoofed)" : ""));
 
         this.$init(socketType, finalHost, finalPort, nativeObj, bufferSize, extra);
     };
@@ -44,7 +47,8 @@ Java.perform(function () {
         return this.onDisconnect(nativeObj, code, message);
     };
 
-    JavaSocket.sendDataTCP.implementation = function (bArr) {
+    /*
+    JavaSocket.sendDataTCP.implementation = function(bArr) {
         console.log("\n[sendDataTCP] Called");
         console.log("  length: " + bArr.length);
 
@@ -70,6 +74,7 @@ Java.perform(function () {
         // Call the original method
         return this.sendDataTCP(bArr);
     };
+    */
 
     /*
     JavaSocket.sendData.implementation = function(bArr) {

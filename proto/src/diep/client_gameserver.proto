@@ -1,0 +1,90 @@
+syntax = "proto2";
+package diep;
+
+message ConnectResponseMessage {
+    required int32 udp_port = 1;
+}
+
+message UdpHandshakeData {
+    required string token = 1;
+}
+
+message EnterGameMessage {
+    required string name = 1;
+}
+
+message InputUpdateMessage {
+    required float movement_direction = 1;
+    required float movement_magnitude = 2;
+    required float aim_direction = 3;
+    required float aim_magnitude = 4;
+    required bool is_firing = 5;
+    required bool is_firing_secondary = 6;
+}
+
+message IncreaseStatMessage {
+    required int32 stat_id = 1;
+}
+
+message AdvanceClassMessage {
+    required int32 class_id = 1;
+}
+
+message GameStateUpdateMessage {
+    required uint32 serialized_game_state_size = 1;
+    required bytes serialized_game_state = 2;
+    optional uint32 player_leaderboard_position = 3;
+}
+
+message GameStateUpdateAckMessage {
+    required int32 tick_id = 1;
+}
+
+message NotificationMessage {
+    required string message = 1;
+    required uint32 color = 2;
+    required float duration = 3;
+}
+
+message Msg {
+    enum TypeEnum {
+        PING = 1;
+        PONG = 2;
+        CONNECT_REQUEST = 10;
+        CONNECT_RESPONSE = 12;
+        UDP_HANDSHAKE_REQUEST = 13;
+        UDP_HANDSHAKE_RESPONSE = 14;
+        UDP_HANDSHAKE_ACK = 15;
+        ENTER_GAME = 20;
+        INPUT_UPDATE = 21;
+        INCREASE_STAT = 22;
+        ADVANCE_CLASS = 23;
+        GAME_STATE_UPDATE = 25;
+        GAME_STATE_UPDATE_ACK = 26;
+        NOTIFICATION = 30;
+        RESET_SIMULATION = 40;
+    }
+
+    optional TypeEnum type = 1;
+    optional ConnectResponseMessage connect_response_message_field = 10;
+    optional UdpHandshakeData udp_handshake_data_field = 11;
+    optional EnterGameMessage enter_game_field = 20;
+    optional InputUpdateMessage input_update_field = 21;
+    optional IncreaseStatMessage increase_stat_field = 22;
+    optional AdvanceClassMessage advance_class_field = 23;
+    optional GameStateUpdateMessage game_state_update_field = 25;
+    optional GameStateUpdateAckMessage game_state_update_ack_field = 26;
+    optional NotificationMessage notification_message_field = 30;
+}
+
+message Envelope {
+    enum ContentTypeEnum {
+        UNCOMPRESSED = 1;
+        COMPRESSED = 2;
+    }
+
+    required ContentTypeEnum content_type = 1;
+    optional Msg uncompressed_data = 2;
+    optional bytes compressed_data = 3;
+    optional uint32 uncompressed_size = 4;
+}
