@@ -1,0 +1,37 @@
+1: "client_server.proto"
+2: "diepio.proto"
+3: "maestro_user.proto"
+4 {
+  1: "enter_game_request"
+}
+4 {
+  1: "enter_game_response"
+  2 {
+    1: "host"
+    3: 1
+    4: 2
+    5: 9
+  }
+  2 {
+    1: "port"
+    3: 2
+    4: 2
+    5: 5
+  }
+}
+7 {
+  1: "enter_game_request_field"
+  2: ".maestro.user_proto.msg"
+  3: 120
+  4: 1
+  5: 11
+  6: ".diepio.proto.enter_game_request"
+}
+7 {
+  1: "enter_game_response_field"
+  2: ".maestro.user_proto.msg"
+  3: 121
+  4: 1
+  5: 11
+  6: ".diepio.proto.enter_game_response"
+}

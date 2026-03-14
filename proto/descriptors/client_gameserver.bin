@@ -1,0 +1,77 @@
+
+client_gameserver.protodiep_io.client_gameserver_proto",
+connect_response_message
+udp_port ("#
+udp_handshake_data
+token (	""
+enter_game_message
+name (	"�
+input_update_message
+movement_direction (
+movement_magnitude (
+
+aim_direction (
+
+aim_magnitude (
+	is_firing (
+is_firing_secondary ("(
+increase_stat_message
+stat_id (")
+advance_class_message
+class_id ("�
+game_state_update_message"
+serialized_game_state_size (
+
+serialized_game_state (#
+player_leaderboard_position (
+"0
+game_state_update_ack_message
+tick_id ("H
+notification_message
+message (	
+color (
+
+duration ("�	
+msg<
+type (2..diep_io.client_gameserver_proto.msg.type_enuma
+connect_response_message_field
+ (29.diep_io.client_gameserver_proto.connect_response_messageU
+udp_handshake_data_field (23.diep_io.client_gameserver_proto.udp_handshake_dataM
+enter_game_field (23.diep_io.client_gameserver_proto.enter_game_messageQ
+input_update_field (25.diep_io.client_gameserver_proto.input_update_messageS
+increase_stat_field (26.diep_io.client_gameserver_proto.increase_stat_messageS
+advance_class_field (26.diep_io.client_gameserver_proto.advance_class_message[
+game_state_update_field (2:.diep_io.client_gameserver_proto.game_state_update_messagec
+game_state_update_ack_field (2>.diep_io.client_gameserver_proto.game_state_update_ack_messageY
+notification_message_field (25.diep_io.client_gameserver_proto.notification_message"�
+	type_enum
+ping
+pong
+connect_request
+
+connect_response
+upd_handshake_request
+
+upd_handshake_response
+upd_handshake_ak
+
+enter_game
+input_update
+
+increase_stat
+
+advance_class
+game_state_update
+game_state_update_ack
+notification
+reset_simulation("�
+envelopeQ
+content_type (2;.diep_io.client_gameserver_proto.envelope.content_type_enum?
+uncompressed_data (2$.diep_io.client_gameserver_proto.msg
+compressed_data (
+uncompressed_size (
+"5
+content_type_enum
+uncompressed
+
+compressed

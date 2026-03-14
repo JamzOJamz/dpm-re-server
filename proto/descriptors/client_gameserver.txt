@@ -1,0 +1,313 @@
+1: "client_gameserver.proto"
+2: "diep_io.client_gameserver_proto"
+4 {
+  1: "connect_response_message"
+  2 {
+    1: "udp_port"
+    3: 1
+    4: 2
+    5: 5
+  }
+}
+4 {
+  1: "udp_handshake_data"
+  2 {
+    1: "token"
+    3: 1
+    4: 2
+    5: 9
+  }
+}
+4 {
+  1: "enter_game_message"
+  2 {
+    1: "name"
+    3: 1
+    4: 2
+    5: 9
+  }
+}
+4 {
+  1: "input_update_message"
+  2 {
+    1: "movement_direction"
+    3: 1
+    4: 2
+    5: 2
+  }
+  2 {
+    1: "movement_magnitude"
+    3: 2
+    4: 2
+    5: 2
+  }
+  2 {
+    1: "aim_direction"
+    3: 3
+    4: 2
+    5: 2
+  }
+  2 {
+    1: "aim_magnitude"
+    3: 4
+    4: 2
+    5: 2
+  }
+  2 {
+    1: "is_firing"
+    3: 5
+    4: 2
+    5: 8
+  }
+  2 {
+    1: "is_firing_secondary"
+    3: 6
+    4: 2
+    5: 8
+  }
+}
+4 {
+  1: "increase_stat_message"
+  2 {
+    1: "stat_id"
+    3: 1
+    4: 2
+    5: 5
+  }
+}
+4 {
+  1: "advance_class_message"
+  2 {
+    1: "class_id"
+    3: 1
+    4: 2
+    5: 5
+  }
+}
+4 {
+  1: "game_state_update_message"
+  2 {
+    1: "serialized_game_state_size"
+    3: 1
+    4: 2
+    5: 13
+  }
+  2 {
+    1: "serialized_game_state"
+    3: 2
+    4: 2
+    5: 12
+  }
+  2 {
+    1: "player_leaderboard_position"
+    3: 3
+    4: 1
+    5: 13
+  }
+}
+4 {
+  1: "game_state_update_ack_message"
+  2 {
+    1: "tick_id"
+    3: 1
+    4: 2
+    5: 5
+  }
+}
+4 {
+  1: "notification_message"
+  2 {
+    1: "message"
+    3: 1
+    4: 2
+    5: 9
+  }
+  2 {
+    1: "color"
+    3: 2
+    4: 2
+    5: 13
+  }
+  2 {
+    1: "duration"
+    3: 3
+    4: 2
+    5: 2
+  }
+}
+4 {
+  1: "msg"
+  2 {
+    1: "type"
+    3: 1
+    4: 1
+    5: 14
+    6: ".diep_io.client_gameserver_proto.msg.type_enum"
+  }
+  2 {
+    1: "connect_response_message_field"
+    3: 10
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.connect_response_message"
+  }
+  2 {
+    1: "udp_handshake_data_field"
+    3: 11
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.udp_handshake_data"
+  }
+  2 {
+    1: "enter_game_field"
+    3: 20
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.enter_game_message"
+  }
+  2 {
+    1: "input_update_field"
+    3: 21
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.input_update_message"
+  }
+  2 {
+    1: "increase_stat_field"
+    3: 22
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.increase_stat_message"
+  }
+  2 {
+    1: "advance_class_field"
+    3: 23
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.advance_class_message"
+  }
+  2 {
+    1: "game_state_update_field"
+    3: 25
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.game_state_update_message"
+  }
+  2 {
+    1: "game_state_update_ack_field"
+    3: 26
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.game_state_update_ack_message"
+  }
+  2 {
+    1: "notification_message_field"
+    3: 30
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.notification_message"
+  }
+  4 {
+    1: "type_enum"
+    2 {
+      1: "ping"
+      2: 1
+    }
+    2 {
+      1: "pong"
+      2: 2
+    }
+    2 {
+      1: "connect_request"
+      2: 10
+    }
+    2 {
+      1: "connect_response"
+      2: 12
+    }
+    2 {
+      1: "upd_handshake_request"
+      2: 13
+    }
+    2 {
+      1: "upd_handshake_response"
+      2: 14
+    }
+    2 {
+      1: "upd_handshake_ak"
+      2: 15
+    }
+    2 {
+      1: "enter_game"
+      2: 20
+    }
+    2 {
+      1: "input_update"
+      2: 21
+    }
+    2 {
+      1: "increase_stat"
+      2: 22
+    }
+    2 {
+      1: "advance_class"
+      2: 23
+    }
+    2 {
+      1: "game_state_update"
+      2: 25
+    }
+    2 {
+      1: "game_state_update_ack"
+      2: 26
+    }
+    2 {
+      1: "notification"
+      2: 30
+    }
+    2 {
+      1: "reset_simulation"
+      2: 40
+    }
+  }
+}
+4 {
+  1: "envelope"
+  2 {
+    1: "content_type"
+    3: 1
+    4: 2
+    5: 14
+    6: ".diep_io.client_gameserver_proto.envelope.content_type_enum"
+  }
+  2 {
+    1: "uncompressed_data"
+    3: 2
+    4: 1
+    5: 11
+    6: ".diep_io.client_gameserver_proto.msg"
+  }
+  2 {
+    1: "compressed_data"
+    3: 3
+    4: 1
+    5: 12
+  }
+  2 {
+    1: "uncompressed_size"
+    3: 4
+    4: 1
+    5: 13
+  }
+  4 {
+    1: "content_type_enum"
+    2 {
+      1: "uncompressed"
+      2: 1
+    }
+    2 {
+      1: "compressed"
+      2: 2
+    }
+  }
+}

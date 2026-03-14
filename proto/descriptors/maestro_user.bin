@@ -1,0 +1,50 @@
+
+maestro_user.protomaestro.user_proto"
+ping
+
+id (
+"
+pong
+
+id (
+"�
+create_session_request
+
+session_token (	
+client_version (	8
+platform (2&.maestro.user_proto.user_platform_enum*d����"N
+create_session_response
+
+is_playing (
+
+session_token (	*d����"�
+
+disconnect:
+reason (2*.maestro.user_proto.disconnect.reason_enum"W
+reason_enum
+not_authorized
+incompatible_client
+user_process_terminated"�
+msg,
+
+ping_field
+ (2.maestro.user_proto.ping,
+
+pong_field (2.maestro.user_proto.pongP
+create_session_request_field (2*.maestro.user_proto.create_session_requestR
+create_session_response_field (2+.maestro.user_proto.create_session_response8
+disconnect_field (2.maestro.user_proto.disconnect*d����"�
+envelopeD
+content_type (2..maestro.user_proto.envelope.content_type_enum2
+uncompressed_data (2.maestro.user_proto.msg
+compressed_data (
+uncompressed_size (
+"5
+content_type_enum
+uncompressed
+
+compressed*3
+user_platform_enum
+ios
+android
+web

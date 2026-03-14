@@ -1,0 +1,3 @@
+protoc --decode_raw < client_gameserver.bin > client_gameserver_raw.txt
+protoc --decode_raw < client_server.bin > client_server_raw.txt
+protoc --decode_raw < maestro_user.bin > maestro_user_raw.txt
