@@ -1,0 +1,17 @@
+syntax = "proto2";
+package diepio.proto;
+
+import "maestro_user.proto";
+
+message enter_game_request {
+}
+
+message enter_game_response {
+    required string host = 1;
+    required int32 port = 2;
+}
+
+extend maestro.user_proto.msg {
+    optional enter_game_request enter_game_request_field = 120;
+    optional enter_game_response enter_game_response_field = 121;
+}
