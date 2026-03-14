@@ -1,0 +1,8 @@
+
+client_server.protodiepio.protomaestro_user.proto"
+enter_game_request"1
+enter_game_response
+host (	
+port (:[
+enter_game_request_field.maestro.user_proto.msgx (2 .diepio.proto.enter_game_request:]
+enter_game_response_field.maestro.user_proto.msgy (2!.diepio.proto.enter_game_response
