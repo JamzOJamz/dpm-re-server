@@ -1,4 +1,4 @@
-Java.perform(function () {
+Java.perform(function() {
 
     var JavaSocket = Java.use("com.miniclip.network.JavaSocket");
 
@@ -13,7 +13,7 @@ Java.perform(function () {
         "long",
         "int",
         "java.lang.String"
-    ).implementation = function (socketType, host, port, nativeObj, bufferSize, extra) {
+    ).implementation = function(socketType, host, port, nativeObj, bufferSize, extra) {
 
         var finalHost = SPOOFED_HOST !== null ? SPOOFED_HOST : host;
         var finalPort = SPOOFED_PORT !== null ? SPOOFED_PORT : port;
@@ -29,24 +29,24 @@ Java.perform(function () {
         this.$init(socketType, finalHost, finalPort, nativeObj, bufferSize, extra);
     };
 
-    JavaSocket.connectTCP.implementation = function () {
-    	console.log("\n[JavaSocket.connectTCP] Attempting connection to " + this._hostAddress.value + ":" + this._hostPort.value);
-    	return this.connectTCP();
+    JavaSocket.connectTCP.implementation = function() {
+        console.log("\n[JavaSocket.connectTCP] Attempting connection to " + this._hostAddress.value + ":" + this._hostPort.value);
+        return this.connectTCP();
     };
 
-JavaSocket.onConnect.implementation = function (nativeObj) {
-    console.log("\n[JavaSocket.onConnect] Connect event fired");
-    return this.onConnect(nativeObj);
-};
+    JavaSocket.onConnect.implementation = function(nativeObj) {
+        console.log("\n[JavaSocket.onConnect] Connect event fired");
+        return this.onConnect(nativeObj);
+    };
 
-JavaSocket.onDisconnect.implementation = function (nativeObj, code, message) {
-    console.log("\n[JavaSocket.onDisconnect] Disconnect event fired");
-    console.log("  code:    " + code);
-    console.log("  message: " + message);
-    return this.onDisconnect(nativeObj, code, message);
-};
+    JavaSocket.onDisconnect.implementation = function(nativeObj, code, message) {
+        console.log("\n[JavaSocket.onDisconnect] Disconnect event fired");
+        console.log("  code:    " + code);
+        console.log("  message: " + message);
+        return this.onDisconnect(nativeObj, code, message);
+    };
 
-JavaSocket.sendDataTCP.implementation = function (bArr) {
+    JavaSocket.sendDataTCP.implementation = function(bArr) {
         console.log("\n[sendDataTCP] Called");
         console.log("  length: " + bArr.length);
 
@@ -73,9 +73,9 @@ JavaSocket.sendDataTCP.implementation = function (bArr) {
         return this.sendDataTCP(bArr);
     };
 
-JavaSocket.sendData.implementation = function (bArr) {
+    /*JavaSocket.sendData.implementation = function(bArr) {
         console.log("\n[sendData] Called");
-        
+
         // Print Java stack trace
         var Exception = Java.use("java.lang.Exception");
         var stackTrace = Exception.$new().getStackTrace();
@@ -86,7 +86,6 @@ JavaSocket.sendData.implementation = function (bArr) {
 
         // Call the original method
         return this.sendData(bArr);
-    };
-
+    };*/
 
 });
