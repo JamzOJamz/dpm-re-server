@@ -1,0 +1,63 @@
+syntax = "proto2";
+package maestro.user_proto;
+
+enum user_platform_enum {
+    ios = 1;
+    android = 2;
+    web = 3;
+}
+
+message ping {
+    required uint32 id = 1;
+}
+
+message pong {
+    required uint32 id = 1;
+}
+
+message create_session_request {
+    optional string session_token = 1;
+    required string client_version = 2;
+    required user_platform_enum platform = 3;
+
+    extensions 100 to max;
+}
+
+message create_session_response {
+    optional bool is_playing = 1;
+    required string session_token = 2;
+
+    extensions 100 to max;
+}
+
+message disconnect {
+    enum reason_enum {
+        not_authorized = 1;
+        incompatible_client = 2;
+        user_process_terminated = 3;
+    }
+
+    required reason_enum reason = 1;
+}
+
+message msg {
+    optional ping ping_field = 10;
+    optional pong pong_field = 11;
+    optional create_session_request create_session_request_field = 20;
+    optional create_session_response create_session_response_field = 21;
+    optional disconnect disconnect_field = 30;
+
+    extensions 100 to max;
+}
+
+message envelope {
+    enum content_type_enum {
+        uncompressed = 1;
+        compressed = 2;
+    }
+
+    required content_type_enum content_type = 1;
+    optional msg uncompressed_data = 2;
+    optional bytes compressed_data = 3;
+    optional uint32 uncompressed_size = 4;
+}
