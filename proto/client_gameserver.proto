@@ -52,9 +52,9 @@ message msg {
         pong = 2;
         connect_request = 10;
         connect_response = 12;
-        upd_handshake_request = 13;
-        upd_handshake_response = 14;
-        upd_handshake_ak = 15;
+        udp_handshake_request = 13;
+        udp_handshake_response = 14;
+        udp_handshake_ack = 15;
         enter_game = 20;
         input_update = 21;
         increase_stat = 22;
