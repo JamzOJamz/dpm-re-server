@@ -1,20 +1,18 @@
-Java.perform(function() {
-
+Java.perform(function () {
     var JavaSocket = Java.use("com.miniclip.network.JavaSocket");
 
     // Set to null to disable spoofing
     var SPOOFED_HOST = "192.168.56.2";
     var SPOOFED_PORT = 8080;
 
-    JavaSocket.$init.overload(
-        "java.lang.String",
-        "java.lang.String",
-        "int",
-        "long",
-        "int",
-        "java.lang.String"
-    ).implementation = function(socketType, host, port, nativeObj, bufferSize, extra) {
-
+    JavaSocket.$init.overload("java.lang.String", "java.lang.String", "int", "long", "int", "java.lang.String").implementation = function (
+        socketType,
+        host,
+        port,
+        nativeObj,
+        bufferSize,
+        extra,
+    ) {
         var finalHost = SPOOFED_HOST !== null ? SPOOFED_HOST : host;
         var finalPort = SPOOFED_PORT !== null ? SPOOFED_PORT : port;
 
@@ -29,24 +27,24 @@ Java.perform(function() {
         this.$init(socketType, finalHost, finalPort, nativeObj, bufferSize, extra);
     };
 
-    JavaSocket.connectTCP.implementation = function() {
+    JavaSocket.connectTCP.implementation = function () {
         console.log("\n[JavaSocket.connectTCP] Attempting connection to " + this._hostAddress.value + ":" + this._hostPort.value);
         return this.connectTCP();
     };
 
-    JavaSocket.onConnect.implementation = function(nativeObj) {
+    JavaSocket.onConnect.implementation = function (nativeObj) {
         console.log("\n[JavaSocket.onConnect] Connect event fired");
         return this.onConnect(nativeObj);
     };
 
-    JavaSocket.onDisconnect.implementation = function(nativeObj, code, message) {
+    JavaSocket.onDisconnect.implementation = function (nativeObj, code, message) {
         console.log("\n[JavaSocket.onDisconnect] Disconnect event fired");
         console.log("  code:    " + code);
         console.log("  message: " + message);
         return this.onDisconnect(nativeObj, code, message);
     };
 
-    JavaSocket.sendDataTCP.implementation = function(bArr) {
+    JavaSocket.sendDataTCP.implementation = function (bArr) {
         console.log("\n[sendDataTCP] Called");
         console.log("  length: " + bArr.length);
 
@@ -54,9 +52,9 @@ Java.perform(function() {
         var hex = "";
         var ascii = "";
         for (var i = 0; i < Math.min(bArr.length, 64); i++) {
-            var b = bArr[i] & 0xFF;
+            var b = bArr[i] & 0xff;
             hex += ("0" + b.toString(16)).slice(-2) + " ";
-            ascii += (b >= 32 && b < 127) ? String.fromCharCode(b) : ".";
+            ascii += (b >= 32 && b < 127) ? String.fromCharCode(b) : "."; // prettier-ignore
         }
         console.log("  hex:    " + hex);
         console.log("  ascii:  " + ascii);
@@ -73,7 +71,8 @@ Java.perform(function() {
         return this.sendDataTCP(bArr);
     };
 
-    /*JavaSocket.sendData.implementation = function(bArr) {
+    /*
+    JavaSocket.sendData.implementation = function(bArr) {
         console.log("\n[sendData] Called");
 
         // Print Java stack trace
@@ -86,6 +85,6 @@ Java.perform(function() {
 
         // Call the original method
         return this.sendData(bArr);
-    };*/
-
+    };
+    */
 });
