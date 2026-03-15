@@ -1,9 +1,10 @@
 import type { Socket } from "dgram";
 import { Envelope } from "./proto";
+import { diepLogger } from "../shared/logger";
 
 export async function handleWebSocketMessage(message: string | Buffer<ArrayBuffer>, ws: Bun.ServerWebSocket) {
     if (typeof message !== "object") {
-        console.warn("Received non-binary message, ignoring");
+        diepLogger.warn("Received non-binary message, ignoring");
         return;
     }
 
@@ -31,18 +32,18 @@ export async function handleWebSocketMessage(message: string | Buffer<ArrayBuffe
                 handleConnectRequest(ws);
                 break;
             default:
-                console.warn("Unknown or unhandled message type:", data.type);
+                diepLogger.warn("Unknown or unhandled message type: " + data.type);
                 break;
         }
     } catch (err) {
-        console.error("Failed to handle WebSocket message:", (err as Error).message);
+        diepLogger.error("Failed to handle WebSocket message: " + (err as Error).message);
     }
 }
 
 export async function handleUdpMessage(msg: Buffer, rinfo: { address: string; port: number }, udpServer: Socket) {
     try {
         const decoded = Envelope.decode(msg);
-        console.log("Decoded UDP message:", JSON.stringify(decoded, null, 2));
+        diepLogger.debug("Decoded UDP message: " + JSON.stringify(decoded, null, 2));
 
         const msgJson = decoded.toJSON();
 
@@ -64,16 +65,16 @@ export async function handleUdpMessage(msg: Buffer, rinfo: { address: string; po
                 handlePingOverUdp(rinfo, udpServer);
                 break;
             default:
-                console.warn("Unknown or unhandled UDP message type:", data.type);
+                diepLogger.warn("Unknown or unhandled UDP message type: " + data.type);
                 break;
         }
     } catch (err) {
-        console.error("Failed to handle UDP message:", err);
+        diepLogger.error("Failed to handle UDP message: " + err);
     }
 }
 
 function handlePingOverTcp(ws: Bun.ServerWebSocket) {
-    console.log("Received message of type PING, sending PONG");
+    diepLogger.debug("Received message of type PING, sending PONG");
 
     const payload = {
         contentType: 1,
@@ -93,7 +94,7 @@ function handlePingOverTcp(ws: Bun.ServerWebSocket) {
 }
 
 function handleConnectRequest(ws: Bun.ServerWebSocket) {
-    console.log("Received message of type CONNECT_REQUEST, sending CONNECT_RESPONSE");
+    diepLogger.debug({ udpPort: 8082 }, "Received message of type CONNECT_REQUEST, sending CONNECT_RESPONSE with UDP port info");
 
     const payload = {
         contentType: 1,
@@ -116,7 +117,7 @@ function handleConnectRequest(ws: Bun.ServerWebSocket) {
 }
 
 function handleUdpHandshakeRequest(rinfo: { address: string; port: number }, udpServer: Socket) {
-    console.log(`Received message of type UDP_HANDSHAKE_REQUEST from ${rinfo.address}:${rinfo.port}, sending UDP_HANDSHAKE_RESPONSE`);
+    diepLogger.debug({ address: rinfo.address, port: rinfo.port }, "Received message of type UDP_HANDSHAKE_REQUEST, sending UDP_HANDSHAKE_RESPONSE");
 
     const payload = {
         contentType: 1,
@@ -138,15 +139,15 @@ function handleUdpHandshakeRequest(rinfo: { address: string; port: number }, udp
 
     udpServer.send(buffer, rinfo.port, rinfo.address, (err: any) => {
         if (err) {
-            console.error("Failed to send UDP_HANDSHAKE_RESPONSE:", err);
+            diepLogger.error("Failed to send UDP_HANDSHAKE_RESPONSE: " + err);
         } else {
-            console.log(`UDP_HANDSHAKE_RESPONSE sent to ${rinfo.address}:${rinfo.port}`);
+            diepLogger.info(`UDP_HANDSHAKE_RESPONSE sent to ${rinfo.address}:${rinfo.port}`);
         }
     });
 }
 
 function handlePingOverUdp(rinfo: { address: string; port: number }, udpServer: Socket) {
-    console.log(`Received message of type PING from ${rinfo.address}:${rinfo.port}, sending PONG`);
+    diepLogger.info(`Received message of type PING from ${rinfo.address}:${rinfo.port}, sending PONG`);
     const payload = {
         contentType: 1,
         uncompressedData: {
@@ -163,9 +164,9 @@ function handlePingOverUdp(rinfo: { address: string; port: number }, udpServer: 
     const buffer = Envelope.encode(message).finish();
     udpServer.send(buffer, rinfo.port, rinfo.address, (err: any) => {
         if (err) {
-            console.error("Failed to send PONG:", err);
+            diepLogger.error("Failed to send PONG: " + err);
         } else {
-            console.log(`PONG sent to ${rinfo.address}:${rinfo.port}`);
+            diepLogger.info(`PONG sent to ${rinfo.address}:${rinfo.port}`);
         }
     });
 }

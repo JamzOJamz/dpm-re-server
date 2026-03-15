@@ -1,5 +1,6 @@
 import { Envelope } from "./proto";
 import { generateSessionToken } from "./utils/session-token";
+import { maestroLogger } from "../shared/logger";
 
 export async function handlePacket(packet: Buffer, socket: any) {
     // console.log(`[Packet] ${packet.length} bytes`);
@@ -23,33 +24,48 @@ export async function handlePacket(packet: Buffer, socket: any) {
         } else if (data[".diepio.proto.enterGameRequestField"]) {
             handleEnterGameRequest(socket);
         } else {
-            console.warn("Unknown message type:", Object.keys(data));
+            maestroLogger.warn("Unknown message type: " + JSON.stringify(Object.keys(data)));
         }
     } catch (err) {
-        console.error("Failed to handle packet:", err);
+        maestroLogger.error("Failed to handle packet: " + err);
     }
 }
 
 function handleCreateSessionRequest(request: any, socket: any) {
-    console.log("Received CreateSessionRequest, sending CreateSessionResponse:", request);
+    maestroLogger.debug("Received CreateSessionRequest");
 
     if (request.clientVersion != "3.0.0") {
-        console.warn("Unsupported client version:", request.clientVersion); // TODO: Handle this properly (send error response)
+        maestroLogger.warn({ clientVersion: request.clientVersion }, "Unsupported client version"); // TODO: Handle this properly (send error response)
     }
 
     if (request.platform != "ANDROID") {
-        console.warn("Unsupported platform:", request.platform); // TODO: Handle this properly (send error response)
+        maestroLogger.warn({ platform: request.platform }, "Unsupported platform"); // TODO: Handle this properly (send error response)
     }
 
-    const response = createCreateSessionResponsePacket(request.sessionToken ?? generateSessionToken());
+    var sessionToken = request.sessionToken;
+    if (!sessionToken) {
+        sessionToken = generateSessionToken();
+        maestroLogger.info({ sessionToken }, "Generated new session token");
+    } else {
+        maestroLogger.info({ sessionToken }, "Reusing provided session token");
+    }
+
+    const response = createCreateSessionResponsePacket(sessionToken);
     socket.write(response);
+
+    maestroLogger.debug("Sent CreateSessionResponse");
 }
 
 function handleEnterGameRequest(socket: any) {
-    console.log("Received EnterGameRequest, sending EnterGameResponse");
+    maestroLogger.debug("Received EnterGameRequest");
 
     const response = createEnterGameResponsePacket();
+
+    maestroLogger.info({ host: "192.168.56.2", port: 8081 }, "Sending game server info to client");
+
     socket.write(response);
+
+    maestroLogger.debug("Sent EnterGameResponse");
 }
 
 function createCreateSessionResponsePacket(

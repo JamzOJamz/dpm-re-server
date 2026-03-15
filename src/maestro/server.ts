@@ -1,12 +1,13 @@
 import { handlePacket } from "./handlers";
 import type { SocketData } from "./types";
+import { maestroLogger } from "../shared/logger";
 
 export const maestroServer = Bun.listen<SocketData>({
     hostname: "0.0.0.0",
     port: 8080,
     socket: {
         open(socket) {
-            console.log("Client connected from " + socket.remoteAddress);
+            maestroLogger.info({ remoteAddress: socket.remoteAddress }, "Client connected");
             socket.data = { buffer: Buffer.alloc(0), expectedSize: null };
         },
         data(socket, rawData) {
@@ -25,10 +26,12 @@ export const maestroServer = Bun.listen<SocketData>({
             }
         },
         close(socket) {
-            console.log("Client disconnected");
+            maestroLogger.info({ remoteAddress: socket.remoteAddress }, "Client disconnected");
         },
         error(socket, error) {
-            console.log("Error: " + error.message);
+            maestroLogger.error({ remoteAddress: socket.remoteAddress, error: error.message }, "Error occurred");
         },
     },
 });
+
+maestroLogger.info("Listening on tcp://0.0.0.0:" + maestroServer.port);
