@@ -15,19 +15,19 @@ export async function handleWebSocketMessage(message: string | Buffer<ArrayBuffe
 
         let data: any = null;
         switch (msg.contentType) {
-            case "uncompressed":
+            case "UNCOMPRESSED":
                 data = msg.uncompressedData;
                 break;
-            case "compressed":
+            case "COMPRESSED":
             default:
                 throw new Error("Unknown or unhandled content type: " + msg.contentType);
         }
 
         switch (data.type) {
-            case "ping":
+            case "PING":
                 handlePingOverTcp(ws);
                 break;
-            case "connect_request":
+            case "CONNECT_REQUEST":
                 handleConnectRequest(ws);
                 break;
             default:
@@ -35,7 +35,7 @@ export async function handleWebSocketMessage(message: string | Buffer<ArrayBuffe
                 break;
         }
     } catch (err) {
-        console.error("Failed to handle WebSocket message:", err);
+        console.error("Failed to handle WebSocket message:", (err as Error).message);
     }
 }
 
@@ -48,19 +48,19 @@ export async function handleUdpMessage(msg: Buffer, rinfo: { address: string; po
 
         let data: any = null;
         switch (msgJson.contentType) {
-            case "uncompressed":
+            case "UNCOMPRESSED":
                 data = msgJson.uncompressedData;
                 break;
-            case "compressed":
+            case "COMPRESSED":
             default:
                 throw new Error("Unknown or unhandled content type: " + msgJson.contentType);
         }
 
         switch (data.type) {
-            case "upd_handshake_request":
+            case "UDP_HANDSHAKE_REQUEST":
                 handleUdpHandshakeRequest(rinfo, udpServer);
                 break;
-            case "ping":
+            case "PING":
                 handlePingOverUdp(rinfo, udpServer);
                 break;
             default:
@@ -73,18 +73,18 @@ export async function handleUdpMessage(msg: Buffer, rinfo: { address: string; po
 }
 
 function handlePingOverTcp(ws: Bun.ServerWebSocket) {
-    console.log("Received ping, sending pong");
+    console.log("Received message of type PING, sending PONG");
 
     const payload = {
         contentType: 1,
         uncompressedData: {
-            type: 2, // pong
+            type: 2, // PONG
         },
     };
 
     const err = Envelope.verify(payload);
     if (err) {
-        throw new Error(`Invalid pong payload: ${err}`);
+        throw new Error(`Invalid PONG payload: ${err}`);
     }
 
     const message = Envelope.create(payload);
@@ -93,12 +93,12 @@ function handlePingOverTcp(ws: Bun.ServerWebSocket) {
 }
 
 function handleConnectRequest(ws: Bun.ServerWebSocket) {
-    console.log("Received connect_request, sending connect_response");
+    console.log("Received message of type CONNECT_REQUEST, sending CONNECT_RESPONSE");
 
     const payload = {
         contentType: 1,
         uncompressedData: {
-            type: 12,
+            type: 12, // CONNECT_RESPONSE
             connectResponseMessageField: {
                 udpPort: 8082,
             },
@@ -116,21 +116,21 @@ function handleConnectRequest(ws: Bun.ServerWebSocket) {
 }
 
 function handleUdpHandshakeRequest(rinfo: { address: string; port: number }, udpServer: Socket) {
-    console.log(`Received UDP handshake request from ${rinfo.address}:${rinfo.port}, sending handshake response`);
+    console.log(`Received message of type UDP_HANDSHAKE_REQUEST from ${rinfo.address}:${rinfo.port}, sending UDP_HANDSHAKE_RESPONSE`);
 
     const payload = {
         contentType: 1,
         uncompressedData: {
-            type: 14, // upd_handshake_response
-            /*udpHandshakeDataField: {
-        token: "abc123", // TODO: Generate a token?
-      },*/
+            type: 14, // UDP_HANDSHAKE_RESPONSE
+            udpHandshakeDataField: {
+                token: "abc123", // TODO: Generate a token?
+            },
         },
     };
 
     const err = Envelope.verify(payload);
     if (err) {
-        throw new Error(`Invalid UDP handshake response payload: ${err}`);
+        throw new Error(`Invalid UDP_HANDSHAKE_RESPONSE payload: ${err}`);
     }
 
     const message = Envelope.create(payload);
@@ -138,34 +138,34 @@ function handleUdpHandshakeRequest(rinfo: { address: string; port: number }, udp
 
     udpServer.send(buffer, rinfo.port, rinfo.address, (err: any) => {
         if (err) {
-            console.error("Failed to send UDP handshake response:", err);
+            console.error("Failed to send UDP_HANDSHAKE_RESPONSE:", err);
         } else {
-            console.log(`UDP handshake response sent to ${rinfo.address}:${rinfo.port}`);
+            console.log(`UDP_HANDSHAKE_RESPONSE sent to ${rinfo.address}:${rinfo.port}`);
         }
     });
 }
 
 function handlePingOverUdp(rinfo: { address: string; port: number }, udpServer: Socket) {
-    console.log(`Received UDP ping from ${rinfo.address}:${rinfo.port}, sending pong`);
+    console.log(`Received message of type PING from ${rinfo.address}:${rinfo.port}, sending PONG`);
     const payload = {
         contentType: 1,
         uncompressedData: {
-            type: 2, // pong
+            type: 2, // PONG
         },
     };
 
     const err = Envelope.verify(payload);
     if (err) {
-        throw new Error(`Invalid UDP pong payload: ${err}`);
+        throw new Error(`Invalid PONG payload: ${err}`);
     }
 
     const message = Envelope.create(payload);
     const buffer = Envelope.encode(message).finish();
     udpServer.send(buffer, rinfo.port, rinfo.address, (err: any) => {
         if (err) {
-            console.error("Failed to send UDP pong response:", err);
+            console.error("Failed to send PONG:", err);
         } else {
-            console.log(`UDP pong response sent to ${rinfo.address}:${rinfo.port}`);
+            console.log(`PONG sent to ${rinfo.address}:${rinfo.port}`);
         }
     });
 }

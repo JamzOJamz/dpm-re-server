@@ -1,5 +1,5 @@
 syntax = "proto2";
-package diep;
+package diep_io.client_gameserver_proto;
 
 message ConnectResponseMessage {
     required int32 udp_port = 1;

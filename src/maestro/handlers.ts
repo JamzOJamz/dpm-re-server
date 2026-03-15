@@ -13,7 +13,7 @@ export async function handlePacket(packet: Buffer, socket: any) {
 
         let data: any = null;
         switch (msg.contentType) {
-            case "uncompressed":
+            case "UNCOMPRESSED":
                 data = msg.uncompressedData;
                 break;
         }
@@ -31,16 +31,14 @@ export async function handlePacket(packet: Buffer, socket: any) {
 }
 
 function handleCreateSessionRequest(request: any, socket: any) {
-    console.log("Received createSessionRequest, sending createSessionResponse:", request);
+    console.log("Received CreateSessionRequest, sending CreateSessionResponse:", request);
 
     if (request.clientVersion != "3.0.0") {
         console.warn("Unsupported client version:", request.clientVersion); // TODO: Handle this properly (send error response)
-        return;
     }
 
-    if (request.platform != "android") {
+    if (request.platform != "ANDROID") {
         console.warn("Unsupported platform:", request.platform); // TODO: Handle this properly (send error response)
-        return;
     }
 
     const response = createCreateSessionResponsePacket(request.sessionToken ?? generateSessionToken());
@@ -48,7 +46,7 @@ function handleCreateSessionRequest(request: any, socket: any) {
 }
 
 function handleEnterGameRequest(socket: any) {
-    console.log("Received enterGameRequest, sending enterGameResponse");
+    console.log("Received EnterGameRequest, sending EnterGameResponse");
 
     const response = createEnterGameResponsePacket();
     socket.write(response);
@@ -70,7 +68,7 @@ function createCreateSessionResponsePacket(
 
     const err = Envelope.verify(payload);
     if (err) {
-        throw new Error(`Invalid createSessionResponse payload: ${err}`);
+        throw new Error(`Invalid CreateSessionResponse payload: ${err}`);
     }
 
     const message = Envelope.create(payload);
@@ -95,7 +93,7 @@ function createEnterGameResponsePacket(): Buffer {
 
     const err = Envelope.verify(payload);
     if (err) {
-        throw new Error(`Invalid enterGameResponse payload: ${err}`);
+        throw new Error(`Invalid EnterGameResponse payload: ${err}`);
     }
 
     const message = Envelope.create(payload);
